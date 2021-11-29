@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Proudmuslim <proudmuslim-dev@protonmail.com>", "Tricked <tricked@duck.com>"]
 license = "MIT"
+license-file = "LICENSE"
 description = """
 (WIP) A Reddit API client.
 """
