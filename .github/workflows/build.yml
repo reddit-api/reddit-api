@@ -2,9 +2,9 @@ name: Build and upload artifacts.
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, modeling ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, modeling ]
 
 env:
   CARGO_TERM_COLOR: always
