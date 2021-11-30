@@ -73,16 +73,14 @@ impl Default for RedditClient {
 
 #[cfg(test)]
 mod tests {
-    use crate::http::RedditApi;
+    use crate::{http::RedditApi, responses::SubRedditNew};
 
     #[tokio::test]
-    async fn test_new_posts() {
+    async fn new_posts() {
         let reddit = RedditApi::default();
-        let res = reddit
+        let _res: SubRedditNew = reddit
             .reddit("bottalks")
             .get_newest_posts("new".to_owned())
             .await;
-        //It hasn't crashed yet so it works!
-        println!("{}", res.kind);
     }
 }
