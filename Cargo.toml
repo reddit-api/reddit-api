@@ -2,7 +2,10 @@
 name = "reddit-api"
 version = "0.1.0"
 edition = "2021"
-authors = ["Proudmuslim <proudmuslim-dev@protonmail.com>", "Tricked <tricked@duck.com>"]
+authors = [
+    "Proudmuslim <proudmuslim-dev@protonmail.com>",
+    "Tricked <tricked@duck.com>",
+]
 license = "MIT"
 description = """
 (WIP) A Reddit API client.
@@ -11,3 +14,11 @@ description = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+reqwest = { version = "0.11.6", features = ["json", "gzip", "brotli"] }
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.72"
+strum = { version = "0.23.0", features = ["derive"] }
+strum_macros = "0.23.1"
+
+[dev-dependencies]
+tokio = { version = "1.14.0", features = ["macros", "rt-multi-thread"] }
