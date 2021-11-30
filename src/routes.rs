@@ -1,6 +1,6 @@
-use std::fmt::{self, Display};
+
 use strum::Display;
-// /https://www.reddit.com/r/bottalks/new.json?sort=new
+// https://www.reddit.com/r/bottalks/new.json?sort=new
 pub enum EndPoints {
     AccessToken,
     SubRedditNew { sort: String, reddit: String },
@@ -32,15 +32,15 @@ impl EndPoints {
     }
 
     pub const fn method(&self) -> Method {
-        match self {
-            &EndPoints::AccessToken => Method::Post,
-            &EndPoints::SubRedditNew { sort: _, reddit: _ } => Method::Get,
+        match *self {
+            EndPoints::AccessToken => Method::Post,
+            EndPoints::SubRedditNew { sort: _, reddit: _ } => Method::Get,
         }
     }
     pub const fn auth_type(&self) -> AuthType {
-        match self {
-            &EndPoints::AccessToken => AuthType::Oath,
-            &EndPoints::SubRedditNew { sort: _, reddit: _ } => AuthType::None,
+        match *self {
+            EndPoints::AccessToken => AuthType::Oath,
+            EndPoints::SubRedditNew { sort: _, reddit: _ } => AuthType::None,
         }
     }
 }

@@ -9,7 +9,7 @@ pub struct SubReddit {
 impl SubReddit {
     pub fn new(client: RedditClient, reddit: String) -> Self {
         SubReddit {
-            client: client,
+            client,
             subreddit: reddit,
         }
     }

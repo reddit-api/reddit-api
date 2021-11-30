@@ -1,11 +1,12 @@
 use reqwest::{header::USER_AGENT, Client};
 
 use crate::{
-    client::RedditClient, responses::access_token::AccessToken, routes::EndPoints,
+    client::RedditClient, responses::access_token::AccessToken,
     subreddit::SubReddit,
 };
 use std::fmt::Display;
 
+#[allow(dead_code)]
 pub struct Session {
     user_agent: String,
     client_id: String,
@@ -20,14 +21,6 @@ pub struct RedditApi {
     session: Option<Session>,
 }
 impl RedditApi {
-    pub fn new() -> Self {
-        let client = RedditClient::new();
-
-        RedditApi {
-            client,
-            session: None,
-        }
-    }
     pub async fn login(
         &mut self,
         user_agent: String,
@@ -48,7 +41,7 @@ impl RedditApi {
         dbg!(&password);
 
         let req = Client::new()
-            .post(format!("https://www.reddit.com/api/v1/access_token",))
+            .post("https://www.reddit.com/api/v1/access_token".to_owned())
             .header(USER_AGENT, &user_agent)
             .basic_auth(&client_id, Some(&client_secret))
             .form(&form);
@@ -58,12 +51,12 @@ impl RedditApi {
         if res.status() == 200 {
             let json = res.json::<AccessToken>().await.unwrap();
             self.session = Some(Session {
-                user_agent,
+                user_agent: user_agent.clone(),
                 client_id,
                 client_secret,
                 username,
                 password,
-                session_id: json.access_token,
+                session_id: json.access_token.clone(),
             });
             self.client = RedditClient::new_with_session(&json.access_token, &user_agent);
         } else {
@@ -72,5 +65,14 @@ impl RedditApi {
     }
     pub fn reddit<T: Display>(&self, reddit: T) -> SubReddit {
         SubReddit::new(self.client.clone(), reddit.to_string())
+    }
+}
+
+impl Default for RedditApi {
+    fn default() -> Self {
+        Self {
+            client: RedditClient::new(),
+            ..Default::default()
+        }
     }
 }

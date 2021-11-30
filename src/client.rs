@@ -1,34 +1,31 @@
-use std::{fmt::Display, io::Read};
+use std::{fmt::Display};
+
+use reqwest::{Client, header};
+use serde::de::DeserializeOwned;
 
 use crate::{
-    responses::sub_reddit_new::SubRedditNew,
     routes::{EndPoints, Method},
 };
-use reqwest::{header, Client};
-use serde::de::DeserializeOwned;
 
 #[derive(Clone)]
 pub struct RedditClient {
     pub(crate) client: Client,
 }
+
 impl RedditClient {
     pub fn new() -> Self {
-        let client = reqwest::Client::builder()
-            .gzip(true)
-            .brotli(true)
-            .build()
-            .unwrap();
-        RedditClient { client }
+        Self::default()
     }
-    pub fn new_with_session<T:fmt::Display, W:fmt::Display>(session: T, user_agent: W) -> Self {
+
+    pub fn new_with_session<T: Display, W: Display>(session: T, user_agent: W) -> Self {
         let mut headers = header::HeaderMap::new();
         headers.insert(
             "Authorization",
-            header::HeaderValue::from_str(session.as_str()).unwrap(),
+            header::HeaderValue::from_str(format!("{}", session).as_str()).unwrap(),
         );
         headers.insert(
             "user-agent",
-            header::HeaderValue::from_str(user_agent.as_str()).unwrap(),
+            header::HeaderValue::from_str(format!("{}", user_agent).as_str()).unwrap(),
         );
 
         let client = reqwest::Client::builder()
@@ -61,18 +58,31 @@ impl RedditClient {
     }
 }
 
+impl Default for RedditClient {
+    fn default() -> Self {
+        Self {
+            client: reqwest::Client::builder()
+            .gzip(true)
+            .brotli(true)
+            .build()
+            .unwrap()
+        }
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
     use crate::http::RedditApi;
 
     #[tokio::test]
     async fn test_new_posts() {
-        let reddit = RedditApi::new();
+        let reddit = RedditApi::default();
         let res = reddit
             .reddit("bottalks")
             .get_newest_posts("new".to_owned())
             .await;
-        //It hasnt crashed yet so it works!
+        //It hasn't crashed yet so it works!
         println!("{}", res.kind);
     }
 }
