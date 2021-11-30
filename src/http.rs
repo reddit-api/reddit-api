@@ -1,7 +1,7 @@
 use reqwest::{header::USER_AGENT, Client};
 
 use crate::{
-    client::RedditClient, responses::access_token::AccessToken,
+    client::RedditClient, responses::AccessToken,
     subreddit::SubReddit,
 };
 use std::fmt::Display;

@@ -1,5 +1,5 @@
 use crate::{
-    client::RedditClient, functions::get_newest_posts, responses::sub_reddit_new::SubRedditNew,
+    client::RedditClient, functions::get_newest_posts, responses::SubRedditNew,
 };
 
 pub struct SubReddit {
