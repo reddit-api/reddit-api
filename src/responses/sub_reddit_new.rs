@@ -110,12 +110,12 @@ pub struct ChildData {
     pub removed_by: Option<serde_json::Value>,
     pub mod_note: Option<serde_json::Value>,
     pub distinguished: Option<Distinguished>,
-    pub subreddit_id: SubredditId,
+    pub subreddit_id: String,
     pub author_is_blocked: bool,
     pub mod_reason_by: Option<serde_json::Value>,
     pub num_reports: Option<serde_json::Value>,
     pub removal_reason: Option<serde_json::Value>,
-    pub link_flair_background_color: LinkFlairBackgroundColor,
+    pub link_flair_background_color: String,
     pub id: String,
     pub is_robot_indexable: bool,
     pub report_reasons: Option<serde_json::Value>,
@@ -209,7 +209,7 @@ pub struct Gildings {
 pub struct Media {
     pub reddit_video: Option<RedditVideo>,
     #[serde(rename = "type")]
-    pub media_type: Option<MediaType>,
+    pub media_type: Option<String>,
     pub oembed: Option<Oembed>,
 }
 
@@ -219,13 +219,13 @@ pub struct Oembed {
     pub version: String,
     pub title: String,
     #[serde(rename = "type")]
-    pub oembed_type: OembedType,
+    pub oembed_type: String,
     pub thumbnail_width: i64,
     pub height: i64,
     pub width: i64,
     pub html: String,
     pub author_name: Option<String>,
-    pub provider_name: ProviderName,
+    pub provider_name: String,
     pub thumbnail_url: String,
     pub thumbnail_height: i64,
     pub author_url: Option<String>,
@@ -258,10 +258,10 @@ pub struct MediaEmbed {
 #[derive(Serialize, Deserialize)]
 pub struct MediaMetadatum {
     pub status: Status,
-    pub e: E,
-    pub m: M,
-    pub p: Vec<S>,
-    pub s: S,
+    pub e: String,
+    pub m: String,
+    pub p: Vec<String>,
+    pub s: String,
     pub id: String,
 }
 
@@ -337,75 +337,12 @@ pub enum Distinguished {
 }
 
 #[derive(Serialize, Deserialize)]
-pub enum LinkFlairBackgroundColor {
-    #[serde(rename = "")]
-    Empty,
-
-    #[serde(rename = "#ff0000")]
-    Ff0000,
-
-    #[serde(rename = "#ffb000")]
-    Ffb000,
-
-    #[serde(rename = "#014980")]
-    The014980,
-
-    #[serde(rename = "#0392cf")]
-    The0392Cf,
-
-    #[serde(rename = "#349e48")]
-    The349E48,
-
-    #[serde(rename = "#365b8c")]
-    The365B8C,
-
-    #[serde(rename = "#7a5901")]
-    The7A5901,
-
-    #[serde(rename = "#800080")]
-    The800080,
-}
-
-#[derive(Serialize, Deserialize)]
 pub enum LinkFlairTextColor {
     #[serde(rename = "dark")]
     Dark,
 
     #[serde(rename = "light")]
     Light,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum MediaType {
-    #[serde(rename = "youtube.com")]
-    YoutubeCom,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum OembedType {
-    #[serde(rename = "video")]
-    Video,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum ProviderName {
-    #[serde(rename = "YouTube")]
-    YouTube,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum E {
-    #[serde(rename = "Image")]
-    Image,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum M {
-    #[serde(rename = "image/jpg")]
-    ImageJpg,
-
-    #[serde(rename = "image/png")]
-    ImagePng,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -436,21 +373,6 @@ pub enum PostHint {
 
     #[serde(rename = "self")]
     PostHintSelf,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum SubredditId {
-    #[serde(rename = "t5_2fwo")]
-    T52Fwo,
-
-    #[serde(rename = "t5_2s7lj")]
-    T52S7Lj,
-
-    #[serde(rename = "t5_2th52")]
-    T52Th52,
-
-    #[serde(rename = "t5_4vqrv0")]
-    T54Vqrv0,
 }
 
 #[derive(Serialize, Deserialize)]
