@@ -4,11 +4,10 @@ use reqwest::{header, Client};
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
-    responses::Media,
     routes::{AuthType, EndPoints, Method},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct RedditClient {
     pub(crate) client: Client,
 }

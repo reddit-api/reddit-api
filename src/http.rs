@@ -14,6 +14,7 @@ pub struct Session {
     session_id: String,
 }
 
+#[derive(Default)]
 pub struct RedditApi {
     client: RedditClient,
     session: Option<Session>,
@@ -56,7 +57,7 @@ impl RedditApi {
         if res.status() == 200 {
             let json = res.json::<AccessToken>().await.unwrap();
             self.session = Some(Session {
-                user_agent: user_agent.to_string().clone(),
+                user_agent: user_agent.to_string(),
                 client_id: client_id.to_string(),
                 client_secret: client_secret.to_string(),
                 username: username.to_string(),
