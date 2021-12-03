@@ -1,5 +1,9 @@
+use core::fmt;
+
 use crate::{
-    client::RedditClient, functions::get_newest_posts, responses::SubRedditNew,
+    client::RedditClient,
+    functions::{get_newest_posts, submit_post_text},
+    responses::SubRedditNew,
 };
 
 pub struct SubReddit {
@@ -12,6 +16,16 @@ impl SubReddit {
             client,
             subreddit: reddit,
         }
+    }
+
+    pub async fn submit_post_text<T: fmt::Display, V: fmt::Display>(&self, title: T, content: V) {
+        submit_post_text(
+            &self.client,
+            self.subreddit.clone(),
+            title.to_string(),
+            content.to_string(),
+        )
+        .await;
     }
 
     /// Gets the newest posts from a subreddit

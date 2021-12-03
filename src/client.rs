@@ -1,10 +1,11 @@
-use std::{fmt::Display};
+use std::fmt::Display;
 
-use reqwest::{Client, header};
-use serde::de::DeserializeOwned;
+use reqwest::{header, Client};
+use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
-    routes::{EndPoints, Method},
+    responses::Media,
+    routes::{AuthType, EndPoints, Method},
 };
 
 #[derive(Clone)]
@@ -14,7 +15,13 @@ pub struct RedditClient {
 
 impl RedditClient {
     pub fn new() -> Self {
-        Self::default()
+        RedditClient {
+            client: reqwest::Client::builder()
+                .gzip(true)
+                .brotli(true)
+                .build()
+                .unwrap(),
+        }
     }
 
     pub fn new_with_session<T: Display, W: Display>(session: T, user_agent: W) -> Self {
@@ -37,39 +44,43 @@ impl RedditClient {
         RedditClient { client }
     }
 
-    pub async fn req<T: DeserializeOwned>(&self, route: EndPoints) -> Result<T, &str> {
-        let res = match route.method() {
-            Method::Get => {
-                let res = self
-                    .client
-                    .get(format!("https://reddit.com/{}", route.path()))
-                    .send()
-                    .await
-                    .unwrap()
-                    .text()
-                    .await
-                    .unwrap();
-                res
-            }
-            _ => todo!(),
+    pub async fn req<T: DeserializeOwned, F>(
+        &self,
+        route: EndPoints,
+        form: Option<F>,
+    ) -> Result<T, &str>
+    where
+        F: Serialize + Sized,
+    {
+        let url = format!(
+            "https://{}reddit.com/{}",
+            if route.auth_type() == AuthType::Oath {
+                "oath."
+            } else {
+                ""
+            },
+            route.path()
+        );
+        let req = match route.method() {
+            Method::Get => self.client.get(url),
+            Method::Delete => self.client.delete(url),
+            Method::Head => self.client.head(url),
+            Method::Patch => self.client.patch(url),
+            Method::Post => self.client.post(url),
         };
+
+        let req = if let Some(form) = form {
+            req.form(&form)
+        } else {
+            req
+        };
+        let res = req.send().await.unwrap().text().await.unwrap();
+        println!("{}", res);
+        std::fs::write("out.json", &res).unwrap();
 
         Ok(serde_json::from_str(&res).unwrap())
     }
 }
-
-impl Default for RedditClient {
-    fn default() -> Self {
-        Self {
-            client: reqwest::Client::builder()
-            .gzip(true)
-            .brotli(true)
-            .build()
-            .unwrap()
-        }
-    }
-}
-
 
 #[cfg(test)]
 mod tests {
@@ -77,7 +88,7 @@ mod tests {
 
     #[tokio::test]
     async fn new_posts() {
-        let reddit = RedditApi::default();
+        let reddit = RedditApi::new();
         let _res: SubRedditNew = reddit
             .reddit("bottalks")
             .get_newest_posts("new".to_owned())
