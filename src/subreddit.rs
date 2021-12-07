@@ -28,6 +28,16 @@ impl SubReddit {
         )
         .await;
     }
+    pub async fn submit_post_url<T: fmt::Display, V: fmt::Display>(&self, title: T, content: V) {
+        println!("{:#?}", self.client.session);
+        submit_post_text(
+            &self.client,
+            self.subreddit.clone(),
+            title.to_string(),
+            content.to_string(),
+        )
+        .await;
+    }
 
     /// Gets the newest posts from a subreddit
     ///  

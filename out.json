@@ -14,7 +14,7 @@
 			10,
 			11,
 			"call",
-			["https://www.reddit.com/r/reddit_api_bot/comments/razfu9/balls/"]
+			["https://www.reddit.com/r/reddit_api_bot/comments/rb0a2o/balls/"]
 		],
 		[1, 12, "attr", "find"],
 		[12, 13, "call", ["*[name=url]"]],

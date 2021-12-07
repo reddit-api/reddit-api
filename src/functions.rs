@@ -28,3 +28,23 @@ pub async fn submit_post_text(
     println!("{}", r);
     std::fs::write("out.json", r).unwrap();
 }
+
+pub async fn submit_post_url(
+    client: &RedditClient,
+    sub_reddit: String,
+    title: String,
+    url: String,
+) {
+    let form = [
+        ("kind", "self"),
+        ("title", &title),
+        ("link", &url),
+        ("sr", &sub_reddit),
+    ];
+    let r = client
+        .req::<Value, _>(EndPoints::SubmitPost, Some(form))
+        .await;
+    let r = serde_json::to_string(&r.unwrap()).unwrap();
+    println!("{}", r);
+    std::fs::write("out.json", r).unwrap();
+}

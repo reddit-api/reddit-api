@@ -90,7 +90,7 @@ mod tests {
         .await;
 
         api.reddit("reddit_api_bot")
-            .submit_post_text("balls", "AS you may have noticed this has succeeded")
+            .submit_post_url("balls", "https://tricked.pro")
             .await;
     }
 }
