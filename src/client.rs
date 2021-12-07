@@ -10,6 +10,7 @@ use crate::{
 #[derive(Clone, Default)]
 pub struct RedditClient {
     pub(crate) client: Client,
+    pub(crate) session: bool,
 }
 
 impl RedditClient {
@@ -20,27 +21,30 @@ impl RedditClient {
                 .brotli(true)
                 .build()
                 .unwrap(),
+            session: false,
         }
     }
 
     pub fn new_with_session<T: Display, W: Display>(session: T, user_agent: W) -> Self {
         let mut headers = header::HeaderMap::new();
         headers.insert(
-            "Authorization",
-            header::HeaderValue::from_str(format!("{}", session).as_str()).unwrap(),
+            header::AUTHORIZATION,
+            header::HeaderValue::from_str(&format!("Bearer {}", session)).unwrap(),
         );
         headers.insert(
-            "user-agent",
-            header::HeaderValue::from_str(format!("{}", user_agent).as_str()).unwrap(),
+            header::USER_AGENT,
+            header::HeaderValue::from_str(&user_agent.to_string()).unwrap(),
         );
-
         let client = reqwest::Client::builder()
             .gzip(true)
             .brotli(true)
             .default_headers(headers)
             .build()
             .unwrap();
-        RedditClient { client }
+        RedditClient {
+            client,
+            session: true,
+        }
     }
 
     pub async fn req<T: DeserializeOwned, F>(
@@ -53,13 +57,14 @@ impl RedditClient {
     {
         let url = format!(
             "https://{}reddit.com/{}",
-            if route.auth_type() == AuthType::Oath {
-                "oath."
+            if route.auth_type() == AuthType::Oauth {
+                "oauth."
             } else {
-                ""
+                "www."
             },
             route.path()
         );
+        println!("URL: {} METHOD: {}", &url, route.method());
         let req = match route.method() {
             Method::Get => self.client.get(url),
             Method::Delete => self.client.delete(url),

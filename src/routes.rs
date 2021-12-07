@@ -18,7 +18,7 @@ pub enum Method {
 
 #[derive(PartialEq)]
 pub enum AuthType {
-    Oath,
+    Oauth,
     None,
 }
 
@@ -41,7 +41,7 @@ impl EndPoints {
     }
     pub const fn auth_type(&self) -> AuthType {
         match *self {
-            EndPoints::AccessToken | EndPoints::SubmitPost => AuthType::Oath,
+            EndPoints::AccessToken | EndPoints::SubmitPost => AuthType::Oauth,
             EndPoints::SubRedditNew { sort: _, reddit: _ } => AuthType::None,
         }
     }

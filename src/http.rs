@@ -81,7 +81,7 @@ mod tests {
     pub async fn test_posting() {
         let mut api = RedditApi::new();
         api.login(
-            "0.0.1:Reddit-api (by /u/trickded-dev)",
+            "linux:Reddit-api:v0.1.0 (by /u/tricked-dev)",
             dotenv::var("CLIENT_ID").unwrap(),
             dotenv::var("CLIENT_SECRET").unwrap(),
             dotenv::var("REDDIT_USERNAME").unwrap(),
@@ -90,10 +90,7 @@ mod tests {
         .await;
 
         api.reddit("reddit_api_bot")
-            .submit_post_text(
-                "This is a test post",
-                "AS you may have noticed this has succeeded",
-            )
+            .submit_post_text("balls", "AS you may have noticed this has succeeded")
             .await;
     }
 }

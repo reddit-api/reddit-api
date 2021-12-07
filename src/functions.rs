@@ -20,6 +20,7 @@ pub async fn submit_post_text(
         ("text", &text),
         ("sr", &sub_reddit),
     ];
+    println!("{:#?}", form);
     let r = client
         .req::<Value, _>(EndPoints::SubmitPost, Some(form))
         .await;

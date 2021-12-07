@@ -19,6 +19,7 @@ impl SubReddit {
     }
 
     pub async fn submit_post_text<T: fmt::Display, V: fmt::Display>(&self, title: T, content: V) {
+        println!("{:#?}", self.client.session);
         submit_post_text(
             &self.client,
             self.subreddit.clone(),
