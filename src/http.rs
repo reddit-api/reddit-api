@@ -89,8 +89,11 @@ mod tests {
         )
         .await;
 
-        api.reddit("reddit_api_bot")
+        let post = api
+            .reddit("reddit_api_bot")
             .submit_post_url("balls", "https://tricked.pro")
             .await;
+
+        println!("id: {} title: {}", post.id(), post.title());
     }
 }

@@ -3,7 +3,7 @@ use core::fmt;
 use crate::{
     client::RedditClient,
     functions::{get_newest_posts, submit_post_text},
-    responses::SubRedditNew,
+    responses::{RedditPostResponse, SubRedditNew},
 };
 
 pub struct SubReddit {
@@ -18,7 +18,11 @@ impl SubReddit {
         }
     }
 
-    pub async fn submit_post_text<T: fmt::Display, V: fmt::Display>(&self, title: T, content: V) {
+    pub async fn submit_post_text<T: fmt::Display, V: fmt::Display>(
+        &self,
+        title: T,
+        content: V,
+    ) -> RedditPostResponse {
         println!("{:#?}", self.client.session);
         submit_post_text(
             &self.client,
@@ -26,17 +30,20 @@ impl SubReddit {
             title.to_string(),
             content.to_string(),
         )
-        .await;
+        .await
     }
-    pub async fn submit_post_url<T: fmt::Display, V: fmt::Display>(&self, title: T, content: V) {
-        println!("{:#?}", self.client.session);
+    pub async fn submit_post_url<T: fmt::Display, V: fmt::Display>(
+        &self,
+        title: T,
+        content: V,
+    ) -> RedditPostResponse {
         submit_post_text(
             &self.client,
             self.subreddit.clone(),
             title.to_string(),
             content.to_string(),
         )
-        .await;
+        .await
     }
 
     /// Gets the newest posts from a subreddit
