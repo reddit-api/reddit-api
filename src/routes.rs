@@ -36,13 +36,13 @@ impl EndPoints {
     pub const fn method(&self) -> Method {
         match *self {
             EndPoints::AccessToken | EndPoints::SubmitPost => Method::Post,
-            EndPoints::SubRedditNew { sort: _, reddit: _ } => Method::Get,
+            EndPoints::SubRedditNew { .. } => Method::Get,
         }
     }
     pub const fn auth_type(&self) -> AuthType {
         match *self {
             EndPoints::AccessToken | EndPoints::SubmitPost => AuthType::Oauth,
-            EndPoints::SubRedditNew { sort: _, reddit: _ } => AuthType::None,
+            EndPoints::SubRedditNew { .. } => AuthType::None,
         }
     }
 }
